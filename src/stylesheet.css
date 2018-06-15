@@ -1,0 +1,125 @@
+body {
+  margin: 0;
+}
+
+.app {
+  background-color: #010101;
+}
+
+.header {
+  display: flex;
+  flex-flow: row;
+  width: 100%;
+  height: 10%;
+}
+
+.Head {
+  background-color: #00FF00;
+  height: 10%;
+  width: 70%;
+  padding-left: 16px;
+}
+
+h1.Head {
+}
+
+/* TopNav */
+
+.TopNav {
+  background-color: #CCFFCC;
+  height: 10%;
+  width: 30%;
+}
+
+nav.TopNav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  height: 10%;
+  overflow: hidden;
+  background-color: #333
+}
+
+nav.TopNav li {
+  float: right;
+}
+
+nav.TopNav li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+nav.TopNav li a:hover {
+  background-color: #111;
+}
+
+/* End TopNav */
+
+
+.content-pane {
+  display: flex;
+  width: 100%;
+  height: 90%;
+
+}
+
+/* SideNav */
+
+.SideNav {
+  width: 20%;
+  background-color: #AAAAFF
+}
+
+nav.SideNav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 19.5%;
+    background-color: #f1f1f1;
+    height: 100%;
+    position: fixed;
+    overflow: auto;
+}
+
+nav.SideNav li h3 {
+  padding: 8px 16px;
+
+}
+
+nav.SideNav li a {
+  display: block;
+  color: #000;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+nav.SideNav li a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+nav.SideNav li a:hover:not(.active) {
+  background-color: #555;
+  color: white;
+}
+
+/* End SideNav */
+
+.Content {
+  background-color: #FF0000;
+  width: 60%;
+  height: 100%;
+  padding: 8px 16px;
+  bottom: 0;
+}
+
+.Meta {
+  background-color: #FF3333;
+  width: 20%;
+  height: 100%;
+  padding: 8px 16px;
+  bottom: 0;
+}
