@@ -5,6 +5,7 @@ class Meta extends React.Component {
     return (
       <div className="Meta">
         <h1>Detections</h1>
+        <hr/>
         <p> 3 detections:</p>
         <ul>
           <li><p>Detection 1 - 0.92%</p></li>

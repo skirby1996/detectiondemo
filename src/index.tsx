@@ -20,7 +20,7 @@ class App extends React.Component {
         </div>
         <div className="content-pane">
           <SideNav/>
-          <Content/>
+          <Content props={[]}/>
           <Meta/>
         </div>
       </div>

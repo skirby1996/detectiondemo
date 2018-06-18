@@ -1,22 +1,38 @@
 import * as React from "react";
+import Dropzone from "react-dropzone";
+// npm install react-dropzone --save
 
-class Content extends React.Component {
+class Content extends React.Component<any, any> {
+
+  constructor(props: any) {
+    super(props)
+    this.onImageDrop = this.onImageDrop.bind(this)
+    this.state = {
+      files: []
+    }
+  }
+
+  public onImageDrop(files: any) {
+    this.setState({
+      files
+    });
+  }
+
   public render() {
     return (
       <div className="Content">
         <h1>Content pane</h1>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. In a libero vel sem sollicitudin tempor.
-          Aenean a purus porttitor, pharetra dui ac, iaculis odio. Sed maximus a quam sed placerat.
-          Nullam quis eros hendrerit, dapibus erat vitae, vestibulum enim. Vivamus sed volutpat nunc, placerat
-          ultrices ipsum. Quisque non magna nec diam ullamcorper vehicula vitae a lectus. Donec tempor ultrices
-          sapien eu tempor. In aliquet dui vitae magna pharetra molestie. Duis et finibus felis. Cras ut nisl
-          aliquam, sollicitudin leo ac, ullamcorper neque. Vivamus dapibus commodo urna, sit amet lobortis dui
-          pellentesque sit amet. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ac libero sit
-          amet nisl porttitor faucibus ut eu odio. Vivamus sit amet faucibus lectus.
-        </p>
-{ /*       <input type="file" onChange={this.fileChangedHandler}>
-<button onClick={this.uploadHandler}>Upload</button> */}
+        <Dropzone
+          multiple={false}
+          accept="image/*"
+          onDrop={this.onImageDrop}>
+          <p>Drop an image or click to select a file to upload.</p>
+        </Dropzone>
+        <ul>
+          {
+            this.state.files.map((f: any) => <li key={f.name}>{f.name} - {f.size} bytes</li>)
+          }
+        </ul>
       </div>
     );
   }
