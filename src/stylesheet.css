@@ -1,58 +1,73 @@
+/* Color pallette
+http://www.color-hex.com/color-palette/62161
+     Beige - #E2C19B
+  Burgundy - #7B1818
+Tan-yellow - #FFD07D
+Pale-green - #779052
+ Off-white - #FFFCF5
+*/
+
 body {
   margin: 0;
 }
 
 .app {
-  background-color: #010101;
+  background-color: #FFFCF5;
+  display: flex;
+  flex-flow: column;
+  width: 100vw;
+  max-width: 100%;
+  height: 100vh;
+  max-height: 100%;
 }
 
 .header {
-  display: flex;
-  flex-flow: row;
   width: 100%;
   height: 10%;
+  display: flex;
+  flex-flow: row;
+  align-items: center;
 }
 
 .Head {
-  background-color: #00FF00;
-  height: 10%;
+  background-color: #7B1818;
   width: 70%;
+  height: 100%;
   padding-left: 16px;
-}
-
-h1.Head {
+  font-size: 18px;
+  color: white;
 }
 
 /* TopNav */
 
 .TopNav {
-  background-color: #CCFFCC;
-  height: 10%;
+  background-color: #7B1818;
   width: 30%;
+  height: 100%;
 }
 
-nav.TopNav ul {
+div.TopNav ul {
+  display: flex;
+  justify-content: flex-end;
   list-style-type: none;
+  height: 100%;
   margin: 0;
   padding: 0;
-  height: 10%;
   overflow: hidden;
-  background-color: #333
+  background-color: #7B1818
 }
 
-nav.TopNav li {
-  float: right;
-}
-
-nav.TopNav li a {
-  display: block;
+div.TopNav li a {
+  display: flex;
+  align-content: center;
   color: white;
   text-align: center;
-  padding: 14px 16px;
+  font-size: 18px;
+  padding: 30px 42px;
   text-decoration: none;
 }
 
-nav.TopNav li a:hover {
+div.TopNav li a:hover {
   background-color: #111;
 }
 
@@ -60,33 +75,30 @@ nav.TopNav li a:hover {
 
 
 .content-pane {
-  display: flex;
-  width: 100%;
   height: 90%;
-
+  display: flex;
+  flex-flow: row;
 }
 
 /* SideNav */
 
 .SideNav {
   width: 20%;
-  background-color: #AAAAFF
+  height: 100%;
+  background-color: #E2C19B;
 }
 
 nav.SideNav ul {
+    height: 100%;
     list-style-type: none;
     margin: 0;
     padding: 0;
-    width: 19.5%;
-    background-color: #f1f1f1;
-    height: 100%;
-    position: fixed;
+    background-color: #E2C19B;
     overflow: auto;
 }
 
 nav.SideNav li h3 {
   padding: 8px 16px;
-
 }
 
 nav.SideNav li a {
@@ -97,29 +109,27 @@ nav.SideNav li a {
 }
 
 nav.SideNav li a.active {
-  background-color: #4CAF50;
-  color: white;
+  background-color: #FFD07D;
 }
 
 nav.SideNav li a:hover:not(.active) {
-  background-color: #555;
-  color: white;
+  background-color: #FFD07D;
 }
 
 /* End SideNav */
 
 .Content {
-  background-color: #FF0000;
   width: 60%;
   height: 100%;
+  background-color: #FFFCF5;
   padding: 8px 16px;
-  bottom: 0;
+  border-right: solid;
+
 }
 
 .Meta {
-  background-color: #FF3333;
   width: 20%;
   height: 100%;
+  background-color: #FFFCF5;
   padding: 8px 16px;
-  bottom: 0;
 }

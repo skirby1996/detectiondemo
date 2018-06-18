@@ -15,6 +15,8 @@ class Content extends React.Component {
           pellentesque sit amet. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ac libero sit
           amet nisl porttitor faucibus ut eu odio. Vivamus sit amet faucibus lectus.
         </p>
+{ /*       <input type="file" onChange={this.fileChangedHandler}>
+<button onClick={this.uploadHandler}>Upload</button> */}
       </div>
     );
   }

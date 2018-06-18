@@ -4,11 +4,12 @@ class Meta extends React.Component {
   public render() {
     return (
       <div className="Meta">
-        <h3>Info</h3>
+        <h1>Detections</h1>
+        <p> 3 detections:</p>
         <ul>
-          <li><p>Fact 1</p></li>
-          <li><p>Fact 2</p></li>
-          <li><p>Fact 3</p></li>
+          <li><p>Detection 1 - 0.92%</p></li>
+          <li><p>Detection 2 - 0.90%</p></li>
+          <li><p>Detection 3 - 0.87%</p></li>
         </ul>
       </div>
     );

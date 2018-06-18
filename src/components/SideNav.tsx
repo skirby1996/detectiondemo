@@ -5,10 +5,10 @@ class SideNav extends React.Component {
     return (
       <nav className="SideNav">
         <ul className="nav-vertical">
-          <li><h3>Side Nav</h3></li>
-          <li><a href="#">Page A</a></li>
-          <li><a href="#">Page B</a></li>
-          <li><a href="#">Page C</a></li>
+          <li><h3>Page Content</h3></li>
+          <li><a href="#">Link A</a></li>
+          <li><a href="#">Link B</a></li>
+          <li><a href="#">Link C</a></li>
         </ul>
       </nav>
     );
