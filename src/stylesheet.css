@@ -7,9 +7,22 @@ Pale-green - #779052
  Off-white - #FFFCF5
 */
 
+/* Default tag styling */
+
+hr {
+  border: 0;
+  height: 1px;
+  background: #333;
+  background-image: linear-gradient(to right, #CCC, #333, #CCC);
+}
+
+
 body {
   margin: 0;
 }
+
+
+/* Custom tag styling */
 
 .app {
   background-color: #FFFCF5;
@@ -74,7 +87,7 @@ div.TopNav li a:hover {
 /* End TopNav */
 
 
-.content-pane {
+.Body {
   height: 90%;
   display: flex;
   flex-flow: row;
@@ -103,8 +116,8 @@ nav.SideNav li h3 {
 
 nav.SideNav li a {
   display: block;
-  color: #000;
   padding: 8px 16px;
+  color: black;
   text-decoration: none;
 }
 
@@ -124,7 +137,15 @@ nav.SideNav li a:hover:not(.active) {
   background-color: #FFFCF5;
   padding: 8px 16px;
   border-right: solid;
+}
 
+div.Content img {
+  height: 400px;
+  width: 600px;
+}
+
+.dropzone-text {
+  text-align: center;
 }
 
 .Meta {

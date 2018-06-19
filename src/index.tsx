@@ -4,13 +4,12 @@ import registerServiceWorker from './registerServiceWorker';
 
 import './stylesheet.css';
 
-import Content from './components/Content'
+import Body from './components/Body'
 import Head from './components/Head';
-import Meta from './components/Meta';
-import SideNav from './components/SideNav';
 import TopNav from './components/TopNav';
 
 class App extends React.Component {
+
   public render() {
     return (
       <div className="app">
@@ -18,11 +17,7 @@ class App extends React.Component {
           <Head/>
           <TopNav/>
         </div>
-        <div className="content-pane">
-          <SideNav/>
-          <Content props={[]}/>
-          <Meta/>
-        </div>
+        <Body/>
       </div>
     );
   }
