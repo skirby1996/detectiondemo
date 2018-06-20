@@ -1,25 +1,29 @@
-/*
-NOTE: Not currently in use
-TODO: Replace upload spot with image when images are selected
-*/
-
 import * as React from 'react';
+import Dropzone from "react-dropzone";
 
-function ContentPane(props: any) {
+function Content(props: any) {
   if (props.currentFileUrl === "") {
     return (
-      <img src={props.currentFileUrl}/>
+      <div className="Content">
+        <h1>Content pane</h1>
+        <Dropzone
+          multiple={true}
+          accept="image/*"
+          onDrop={props.onImageDrop}>
+          <p className="dropzone-text">
+            Drop an image or click to select a file to upload.
+          </p>
+        </Dropzone>
+      </div>
     );
   } else {
     return (
-      <Dropzone
-        multiple={true}
-        accept="image/*"
-        onDrop={this.onImageDrop}>
-        <p className="dropzone-text">Drop an image or click to select a file to upload.</p>
-      </Dropzone>
+      <div className="Content">
+        <h1>Content pane</h1>
+        <img src={props.currentFileUrl}/>
+      </div>
     );
   }
 }
 
-export default ContentPane;
+export default Content;

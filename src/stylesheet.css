@@ -12,15 +12,11 @@ Pale-green - #779052
 hr {
   border: 0;
   height: 1px;
-  background: #333;
-  background-image: linear-gradient(to right, #CCC, #333, #CCC);
 }
-
 
 body {
   margin: 0;
 }
-
 
 /* Custom tag styling */
 
@@ -86,7 +82,6 @@ div.TopNav li a:hover {
 
 /* End TopNav */
 
-
 .Body {
   height: 90%;
   display: flex;
@@ -101,32 +96,40 @@ div.TopNav li a:hover {
   background-color: #E2C19B;
 }
 
-nav.SideNav ul {
-    height: 100%;
+nav.SideNav h3 {
+  padding: 8px 16px;
+}
+
+nav.SideNav hr {
+  background: #E2C19B;
+  background-image: linear-gradient(to right, #E2C19B, #333, #E2C19B);
+}
+
+nav.SideNav table {
     list-style-type: none;
-    margin: 0;
-    padding: 0;
+    width: 100%;
+    border-collapse: collapse;
     background-color: #E2C19B;
     overflow: auto;
 }
 
-nav.SideNav li h3 {
-  padding: 8px 16px;
+nav.SideNav tr:hover {
+  background-color: #FFD07D;
 }
 
-nav.SideNav li a {
-  display: block;
-  padding: 8px 16px;
-  color: black;
+nav.SideNav th, td {
+  padding: 3px 5px;
+  text-align: left;
+  border-bottom: 1px solid #333;
+}
+
+nav.SideNav th a, td a {
   text-decoration: none;
+  color: black;
 }
 
-nav.SideNav li a.active {
-  background-color: #FFD07D;
-}
-
-nav.SideNav li a:hover:not(.active) {
-  background-color: #FFD07D;
+nav.SideNav td img {
+  text-align: center;
 }
 
 /* End SideNav */
@@ -153,4 +156,9 @@ div.Content img {
   height: 100%;
   background-color: #FFFCF5;
   padding: 8px 16px;
+}
+
+div.Meta hr {
+  background: #FFFCF5;
+  background-image: linear-gradient(to right, #FFFCF5, #333, #FFFCF5);
 }

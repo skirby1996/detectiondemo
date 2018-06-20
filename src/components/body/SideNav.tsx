@@ -1,49 +1,33 @@
 import * as React from 'react';
 
-class SideNav extends React.Component<any, any> {
-
-  constructor (props: any) {
-    super(props)
-    this.resetFiles = this.resetFiles.bind(this)
-    this.state = {
-      files: []
-    }
-  }
-
-  public componentWillReceiveProps(props: any) {
-    this.setState({
-      files: props.files
-    });
-  }
-
-  public resetFiles() {
-    this.props.parentReset()
-  }
-
-  public selectFile(fileName: string) {
-    this.props.parentSelect(fileName)
-  }
-
-  public render() {
-    return (
-      <nav className="SideNav">
-        <ul className="nav-vertical">
-          <li><h3>Uploaded Images</h3></li>
-          <li><hr/></li>
-          <li><a href="#" onClick={this.resetFiles}>Reset</a></li>
-          {
-            this.state.files.map((f: any) =>
-              <li key={f.name}>
-                <a href="#"
-                  onClick={this.selectFile.bind(this, f.name)}>
-                  {f.name}
-                </a>
-              </li>)
-          }
-        </ul>
-      </nav>
-    );
-  }
+function SideNav(props: any) {
+  return (
+    <nav className="SideNav">
+      <br/>
+      <table className="nav-vertical">
+        <th>Files</th>
+        <th>Upload</th>
+        <th><a href="#" onClick={props.resetFiles}>Delete</a></th>
+        {
+        props.files.map((f: any) =>
+          <tr key={f.name}>
+            <td><a href="#"
+              onClick={props.selectFile.bind(props.container, f.name)}>
+              {f.name}
+            </a></td>
+            <td><a href="#"
+              onClick={props.uploadFile.bind(props.container, f.name)}>
+              <img src={window.location.origin + "/resources/icons/upload.png"}/>
+            </a></td>
+            <td><a href="#"
+              onClick={props.deleteFile.bind(props.container, f.name)}>
+              <img src={window.location.origin + "/resources/icons/delete.png"}/>
+            </a></td>
+          </tr>)
+        }
+      </table>
+    </nav>
+  );
 }
 
 export default SideNav;
