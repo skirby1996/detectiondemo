@@ -16,7 +16,8 @@ class Body extends React.Component<any, any> {
     this.state = {
       currentFile: "",
       currentFileUrl: "",
-      files: []
+      files: [],
+      response: {}
     }
   }
 
@@ -31,7 +32,8 @@ class Body extends React.Component<any, any> {
     this.setState({
       currentFile: "",
       currentFileUrl: "",
-      files: []
+      files: [],
+      response: {}
     });
   }
 
@@ -51,9 +53,8 @@ class Body extends React.Component<any, any> {
     for (const f of this.state.files) {
       if (f.name === fileName) {
         // tslint:disable:no-console
-         console.log("Uploading " + fileName)
-         const response = this.JSONrequest()
-         console.log(response.Body.text())
+        console.log("Uploading " + fileName)
+        this.JSONrequest(fileName)
       }
     }
   }
@@ -74,20 +75,20 @@ class Body extends React.Component<any, any> {
     }
   }
 
-  public JSONrequest() {
-    return (
-      fetch("localhost:5000/json-simple", {
-        method: 'POST',
-        // tslint:disable
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          param1: "",
-          param2: "",
-        })
+  public JSONrequest(fName: string) {
+    // tslint:disable:object-literal-sort-keys
+    fetch("http://localhost:5000/get-detections", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        fileName: fName
       })
-    )
+    })
+      .then(response => response.json())
+      .then(parsedJSON => this.setState({response: parsedJSON}))
+      .catch(error => console.log("Parsing failed" + error))
   }
 
   public render() {
@@ -97,7 +98,7 @@ class Body extends React.Component<any, any> {
           resetFiles={this.resetFiles} selectFile={this.selectFile}
           uploadFile={this.uploadFile} deleteFile={this.deleteFile}/>
         <Content currentFileUrl={this.state.currentFileUrl} onImageDrop={this.onImageDrop}/>
-        <Meta name={this.JSONrequest}/>
+        <Meta response={this.state.response}/>
       </div>
     );
   }
