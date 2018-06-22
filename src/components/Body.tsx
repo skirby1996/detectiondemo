@@ -49,6 +49,7 @@ class Body extends React.Component<any, any> {
     }
   }
 
+
   public uploadFile(fileName: string) {
     for (const f of this.state.files) {
       if (f.name === fileName) {
@@ -75,8 +76,23 @@ class Body extends React.Component<any, any> {
     }
   }
 
+/*
+Current JSON request: Sends image to server, receives dummy detections
+
+Instead: First send image metadata (size, name, shape, etc.), then wait
+for response (server might decide image is too large/small, etc.) Once
+response is received and verified send the image data to the server, then
+wait for the relevant detections before updating state
+*/
   public JSONrequest(fName: string) {
     // tslint:disable:object-literal-sort-keys
+    for (const f of this.state.files) {
+      if (f.name === fName) {
+        const base64data = this._fileToBase64(f)
+        console.log(base64data)
+      }
+    }
+
     fetch("http://localhost:5000/get-detections", {
       method: "POST",
       headers: {
@@ -101,6 +117,16 @@ class Body extends React.Component<any, any> {
         <Meta response={this.state.response}/>
       </div>
     );
+  }
+  private _fileToBase64(file: any) {
+    let result = ""
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => {
+      result = reader.result;
+    }
+    console.log(result)
+    return (result)
   }
 }
 

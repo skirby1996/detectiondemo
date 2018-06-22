@@ -1,3 +1,16 @@
+# NOTE: Server currently just receives a JSON request and returns a json
+# response containing random dummy detections
+#
+# TODO: Reqests will send an image, server should take that image,
+# apply necessary transformations (Scaling/Clipping) to prep it for the net
+# before allowing the network (should be loaded in and idling while waiting for
+# a new request, or processing another image in which case add the sent
+# image to the back of a queue.) Server should respond to request with real
+# detections.
+#
+# IDEA: Split requests into two parts so that server can verify image is valid
+# before receiving it (i.e. make sure image is not too large before downloading)
+
 from flask import Flask, request
 from flask_cors import CORS
 import json
@@ -25,7 +38,7 @@ def json_simple():
     req_data = request.get_json()
 
     response = {}
-   
+
     if req_data is None:
         return (json.dumps({ results: "Error! Bad request" }))
     if not 'fileName' in req_data:
