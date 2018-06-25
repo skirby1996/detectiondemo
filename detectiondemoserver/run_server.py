@@ -13,8 +13,17 @@
 
 from flask import Flask, request
 from flask_cors import CORS
+
+import keras
+from keras_retinanet import models
+from keras_retinanet.utils.image import read_image_bgr, preprocess_image, resize_image
+import tensorflow as tf
+
+import cv2
 import json
+import base64
 import random as rand
+import numpy as np
 
 app = Flask(__name__)
 CORS(app)
@@ -33,6 +42,41 @@ def get_dummy_detections():
 
     return detections
 
+def init_model():
+    # TODO: Should load model so that each time get_detections() is called
+    # it returns detections from the model, without having to load the model
+    # each time
+    print("Initializing inference model")
+
+    model_path = os.path.join('..', 'path', 'to', 'model')
+    return models.load_model(model_path, backbone_name='resnet50')
+
+def get_detections(image):
+    # TODO: Should take an image (batch) as an argument, then run the image
+    # through the model and return the detections in a JSON string. See
+    # get_dummy_detections() for JSON formatting
+
+    boxes, scores, labels = model.predict_on_batch(np.expand_dims(image, axis=0))
+
+    detections = {}
+    for i, box, score, label in enumerate(zip(boxes[0], scores[0], labels[0])):
+        if score < (threshold = 0.5):
+            # Sorted by score so once here break to skip low scores
+            break
+
+        detection = {}
+        detection['class'] = label
+        detection['score'] = score
+        detection['bbox_x'] = -1 # TODO
+        detection['bbox_y'] = -1 # TODO
+        detection['bbox_w'] = -1 # TODO
+        detection['bbox_h'] = -1 # TODO
+
+        detections[i] = detection
+
+    return (detections)
+
+
 @app.route('/get-detections', methods=['POST'])
 def json_simple():
     req_data = request.get_json()
@@ -43,10 +87,25 @@ def json_simple():
         return (json.dumps({ results: "Error! Bad request" }))
     if not 'fileName' in req_data:
         return (json.dumps({ results: "Error! Missing key" }))
+
+    if 'data' in req_data.keys():
+        data = req_data['data']
+        data = data[(data.find(',') + 1):]
+        with open(req_data['fileName'], 'wb') as f:
+            f.write(base64.decodebytes(bytes(data, 'ascii')))
+    else:
+        print("Request contained no data")
+
     response['fileName'] = req_data['fileName']
-    response['detections'] = get_dummy_detections()
+
+    image = read_image_bgr(req_data['fileName'])
+    image = preprocess_image(image)
+    image, _ = resize_image(image)
+
+    response['detections'] = get_detections(image)
 
     return (json.dumps(response))
 
 if __name__ == '__main__':
+    model = init_model()
     app.run(debug=True, port=5000)

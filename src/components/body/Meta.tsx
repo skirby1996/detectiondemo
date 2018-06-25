@@ -36,8 +36,8 @@ function Meta(props: any) {
                          {' ' + props.response['detections'][ind]['bbox_y']}) +
                         ({props.response['detections'][ind]['bbox_w']},
                          {' ' + props.response['detections'][ind]['bbox_h']})
-              </p>
-            </li>
+                </p>
+              </li>
             </ul>
           </ul>
         )}

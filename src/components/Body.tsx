@@ -88,23 +88,25 @@ wait for the relevant detections before updating state
     // tslint:disable:object-literal-sort-keys
     for (const f of this.state.files) {
       if (f.name === fName) {
-        const base64data = this._fileToBase64(f)
-        console.log(base64data)
+        this._fileToBase64(f).then(
+          base64data => {
+            fetch("http://localhost:5000/get-detections", {
+              method: "POST",
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                fileName: fName,
+                data: base64data
+              })
+            })
+            .then(response => response.json())
+            .then(parsedJSON => this.setState({response: parsedJSON}))
+            .catch(error => console.log("Parsing failed" + error))
+          }
+        )
       }
     }
-
-    fetch("http://localhost:5000/get-detections", {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        fileName: fName
-      })
-    })
-      .then(response => response.json())
-      .then(parsedJSON => this.setState({response: parsedJSON}))
-      .catch(error => console.log("Parsing failed" + error))
   }
 
   public render() {
@@ -118,15 +120,14 @@ wait for the relevant detections before updating state
       </div>
     );
   }
+
   private _fileToBase64(file: any) {
-    let result = ""
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = () => {
-      result = reader.result;
-    }
-    console.log(result)
-    return (result)
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => resolve(reader.result)
+      reader.onerror = error => reject(error)
+    })
   }
 }
 
