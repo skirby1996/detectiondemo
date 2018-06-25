@@ -18,16 +18,26 @@ function Meta(props: any) {
         <p>{props.response['fileName']}</p>
         {
         Object.keys(props.response['detections']).map((ind: any) =>
-          <ul>
-            <li><p>Class: {props.response['detections'][ind]['class']}</p></li>
-            <ul>
-              <li><p>Score: {props.response['detections'][ind]['score'].toFixed(3)}</p></li>
-              <li><p>
-                BBOX: ({props.response['detections'][ind]['bbox_x']},
-                       {' ' + props.response['detections'][ind]['bbox_y']}) +
-                      ({props.response['detections'][ind]['bbox_w']},
-                       {' ' + props.response['detections'][ind]['bbox_h']})
-              </p></li>
+          <ul key={ind}>
+            <li key={ind + 'class'}>
+              <p>
+                Class: {props.response['detections'][ind]['class']}
+              </p>
+            </li>
+            <ul key={ind + 'detailed'}>
+              <li key={ind + 'score'}>
+                <p>
+                  Score: {props.response['detections'][ind]['score'].toFixed(3)}
+                </p>
+              </li>
+              <li key={ind + 'bbox'}>
+                <p>
+                  BBOX: ({props.response['detections'][ind]['bbox_x']},
+                         {' ' + props.response['detections'][ind]['bbox_y']}) +
+                        ({props.response['detections'][ind]['bbox_w']},
+                         {' ' + props.response['detections'][ind]['bbox_h']})
+              </p>
+            </li>
             </ul>
           </ul>
         )}

@@ -6,7 +6,7 @@ function SideNav(props: any) {
       <br/>
       <table className="nav-vertical">
         <thead>
-          <tr>
+          <tr key="head">
             <th>Files</th>
             <th>Upload</th>
             <th><a href="#" onClick={props.resetFiles}>Delete</a></th>
