@@ -1,16 +1,3 @@
-# NOTE: Server currently just receives a JSON request and returns a json
-# response containing random dummy detections
-#
-# TODO: Reqests will send an image, server should take that image,
-# apply necessary transformations (Scaling/Clipping) to prep it for the net
-# before allowing the network (should be loaded in and idling while waiting for
-# a new request, or processing another image in which case add the sent
-# image to the back of a queue.) Server should respond to request with real
-# detections.
-#
-# IDEA: Split requests into two parts so that server can verify image is valid
-# before receiving it (i.e. make sure image is not too large before downloading)
-
 from flask import Flask, request
 from flask_cors import CORS
 
@@ -21,6 +8,7 @@ import tensorflow as tf
 
 import cv2
 import json
+import os
 import base64
 import random as rand
 import numpy as np
@@ -28,7 +16,18 @@ import numpy as np
 app = Flask(__name__)
 CORS(app)
 
+model = None
+graph = None
+labels_to_names = { 0: 'chair',
+                    1: 'table',
+                    2: 'cabinet',
+                    3: 'shelf',
+                    4: 'monitor',
+                    5: 'door',
+                    6: 'window'}
+
 def get_dummy_detections():
+    print ("Generating dummy detections...")
     detections = {}
     for i in range(rand.randrange(5)):
         detection = {}
@@ -42,70 +41,77 @@ def get_dummy_detections():
 
     return detections
 
-def init_model():
-    # TODO: Should load model so that each time get_detections() is called
-    # it returns detections from the model, without having to load the model
-    # each time
-    print("Initializing inference model")
+def get_session():
+    config = tf.ConfigProto()
+    config.gpu_options.allow_growth = True
+    return tf.Session(config=config)
 
-    model_path = os.path.join('..', 'path', 'to', 'model')
+def init_model():
+    model_path = os.path.join('model', 'resnet50_inf_07.h5')
     return models.load_model(model_path, backbone_name='resnet50')
 
-def get_detections(image):
-    # TODO: Should take an image (batch) as an argument, then run the image
-    # through the model and return the detections in a JSON string. See
-    # get_dummy_detections() for JSON formatting
+def get_detections(filename):
+    image = read_image_bgr(filename)
+    image = preprocess_image(image)
+    image, scale = resize_image(image)
 
-    boxes, scores, labels = model.predict_on_batch(np.expand_dims(image, axis=0))
+    with graph.as_default():
+        boxes, scores, labels = model.predict_on_batch(np.expand_dims(image, axis=0))
+    boxes /= scale
 
     detections = {}
-    for i, box, score, label in enumerate(zip(boxes[0], scores[0], labels[0])):
-        if score < (threshold = 0.5):
+    i = 0
+    for box, score, label in zip(boxes[0], scores[0], labels[0]):
+        if score < 0.5:
             # Sorted by score so once here break to skip low scores
             break
 
         detection = {}
-        detection['class'] = label
-        detection['score'] = score
-        detection['bbox_x'] = -1 # TODO
-        detection['bbox_y'] = -1 # TODO
-        detection['bbox_w'] = -1 # TODO
-        detection['bbox_h'] = -1 # TODO
+        detection['class'] = labels_to_names[label]
+        detection['score'] = score.item()
+        detection['bbox_x'] = box[0].item()
+        detection['bbox_y'] = box[1].item()
+        detection['bbox_w'] = box[2].item() - box[0].item()
+        detection['bbox_h'] = box[3].item() - box[1].item()
 
         detections[i] = detection
+        i += 1
 
     return (detections)
 
-
 @app.route('/get-detections', methods=['POST'])
-def json_simple():
+def detection_page():
     req_data = request.get_json()
 
-    response = {}
+    if model is not None:
+        response = {}
+        if req_data is None:
+            return (json.dumps({ 'results': "Error! Bad request" }))
+        if not 'fileName' in req_data:
+            return (json.dumps({ 'results': "Error! Missing key" }))
+        filename = req_data['fileName']
 
-    if req_data is None:
-        return (json.dumps({ results: "Error! Bad request" }))
-    if not 'fileName' in req_data:
-        return (json.dumps({ results: "Error! Missing key" }))
+        if 'data' in req_data.keys():
+            data = req_data['data']
+            data = data[(data.find(',') + 1):]
+            with open(filename, 'wb') as f:
+                f.write(base64.decodebytes(bytes(data, 'ascii')))
+        else:
+            print("Request contained no data")
 
-    if 'data' in req_data.keys():
-        data = req_data['data']
-        data = data[(data.find(',') + 1):]
-        with open(req_data['fileName'], 'wb') as f:
-            f.write(base64.decodebytes(bytes(data, 'ascii')))
+        response['fileName'] = filename
+        response['detections'] = get_detections(filename)
+        os.remove(filename)
+
+        return (json.dumps(response))
+
     else:
-        print("Request contained no data")
-
-    response['fileName'] = req_data['fileName']
-
-    image = read_image_bgr(req_data['fileName'])
-    image = preprocess_image(image)
-    image, _ = resize_image(image)
-
-    response['detections'] = get_detections(image)
-
-    return (json.dumps(response))
+        return (json.dumps({ 'results': "Error! Image request sent before \
+                                       model was initialized"}))
 
 if __name__ == '__main__':
+    #keras.backend.tensorflow_backend.set_session(get_session())
     model = init_model()
-    app.run(debug=True, port=5000)
+    model._make_predict_function()
+    graph = tf.get_default_graph()
+    app.run(debug=False, port=5000)
